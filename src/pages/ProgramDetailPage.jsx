@@ -1,246 +1,29 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import {
-  ArrowLeft,
-  ArrowRight,
-  Award,
-  CheckCircle2,
-  Clock3,
-  Layers3,
-  Mail,
-  Users,
-} from 'lucide-react';
-import { programsData } from '../data/programsData';
+import { ArrowLeft, ArrowRight, Award, CheckCircle2, Clock3, Layers3, Mail, Users } from 'lucide-react';
+import { allProgramsData } from '../data/programCatalog';
 import Badge from '../components/ui/Badge';
 import Button from '../components/ui/Button';
 
-const trackAccent = {
-  'ai-literacy': 'from-cyan-500/15 to-transparent border-cyan-500/20',
-  'applied-ai': 'from-indigo-500/15 to-transparent border-indigo-500/20',
-  'ai-software-careers': 'from-violet-500/15 to-transparent border-violet-500/20',
-};
+const trackAccent = { 'ai-literacy': 'from-cyan-500/15 to-transparent border-cyan-500/20', 'applied-ai': 'from-indigo-500/15 to-transparent border-indigo-500/20', 'ai-careers': 'from-violet-500/15 to-transparent border-violet-500/20' };
 
 export default function ProgramDetailPage() {
   const { programId } = useParams();
-  const program = programsData.find((item) => item.id === programId || item.slug === programId);
-
-  if (!program) {
-    return (
-      <main className="mx-auto max-w-4xl px-4 py-24 text-center">
-        <p className="mb-3 text-xs font-mono uppercase tracking-[0.2em] text-text-sub">404 / Program</p>
-        <h1 className="text-3xl font-bold text-text-main">Program not found</h1>
-        <p className="mx-auto mt-3 max-w-md text-text-muted">The program may have moved or is no longer available.</p>
-        <div className="mt-7">
-          <Button to="/programs" variant="secondary" icon={ArrowLeft} iconPosition="left">Browse programs</Button>
-        </div>
-      </main>
-    );
-  }
-
-  const accent = trackAccent[program.trackId] || 'from-indigo-500/15 to-transparent border-indigo-500/20';
-
-  return (
-    <main className="pb-20">
-      <div className="mx-auto max-w-6xl px-4 pt-7 sm:px-6 lg:px-8">
-        <Link
-          to="/programs"
-          className="inline-flex items-center gap-2 text-sm text-text-muted transition hover:text-text-main"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          All programs
-        </Link>
-
-        {/* Hero */}
-        <section className={`mt-6 overflow-hidden rounded-3xl border bg-gradient-to-br ${accent}`}>
-          <div className="grid gap-8 p-6 sm:p-9 lg:grid-cols-[1fr_300px] lg:p-10">
-            <div>
-              <div className="flex flex-wrap items-center gap-2.5">
-                <Badge trackId={program.trackId} icon>{program.trackName}</Badge>
-                <span className="rounded-full border border-border-subtle bg-surface/70 px-3 py-1 text-xs text-text-muted">{program.level}</span>
-                <span className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-600 dark:text-emerald-400">
-                  {program.status}
-                </span>
-              </div>
-
-              <h1 className="mt-6 max-w-4xl text-4xl font-extrabold tracking-tight text-text-main sm:text-5xl lg:text-6xl">
-                {program.title}
-              </h1>
-              <p className="mt-5 max-w-3xl text-lg leading-8 text-text-muted sm:text-xl">
-                {program.tagline}
-              </p>
-
-              <div className="mt-7 flex flex-wrap gap-3">
-                <Button to="/workshops" variant="primary" size="md" icon={ArrowRight}>Explore learning options</Button>
-                <Button to="/institutions" variant="secondary" size="md">For institutions</Button>
-              </div>
-            </div>
-
-            <aside className="self-end rounded-2xl border border-border-subtle bg-surface/80 p-5 backdrop-blur-sm">
-              <p className="text-xs font-mono uppercase tracking-[0.16em] text-text-sub">Program at a glance</p>
-              <div className="mt-4 space-y-3">
-                <Meta icon={Clock3} label="Duration" value={program.duration} />
-                <Meta icon={Layers3} label="Format" value={program.deliveryMode} />
-                <Meta icon={Award} label="Outcome" value="Practical proof of capability" />
-              </div>
-            </aside>
-          </div>
-        </section>
-
-        {/* Outcome + audience */}
-        <section className="mt-12 grid gap-5 lg:grid-cols-[1.25fr_.75fr]">
-          <div className="rounded-2xl border border-border-subtle bg-surface p-6 sm:p-7">
-            <p className="text-xs font-mono uppercase tracking-[0.16em] text-indigo-600 dark:text-indigo-400">What you leave with</p>
-            <h2 className="mt-3 text-2xl font-bold tracking-tight text-text-main">A capability you can demonstrate.</h2>
-            <p className="mt-3 text-base leading-7 text-text-muted">{program.primaryOutcome}</p>
-          </div>
-
-          <div className="rounded-2xl border border-border-subtle bg-surface p-6 sm:p-7">
-            <p className="text-xs font-mono uppercase tracking-[0.16em] text-text-sub">Best for</p>
-            <ul className="mt-4 space-y-3">
-              {program.whoIsThisFor.idealFor.map((item) => (
-                <li key={item} className="flex gap-2.5 text-sm leading-6 text-text-muted">
-                  <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-emerald-500" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        {/* Requirements */}
-        <section className="mt-5 grid gap-5 sm:grid-cols-2">
-          <InfoCard label="Prerequisites" value={program.whoIsThisFor.prerequisites} />
-          <InfoCard label="Weekly effort" value={program.whoIsThisFor.timeCommitment} />
-        </section>
-
-        {/* Builds */}
-        <section className="mt-16">
-          <SectionIntro eyebrow="Build" title="Build work you can show." copy="Each stage ends in a practical artifact—not just another lesson completed." />
-          <div className="mt-7 grid gap-4 md:grid-cols-2">
-            {program.whatYouWillBuild.map((build, index) => (
-              <article key={build.title} className="rounded-2xl border border-border-subtle bg-surface p-5 transition hover:-translate-y-0.5 hover:border-indigo-500/30 sm:p-6">
-                <div className="flex items-center justify-between gap-4">
-                  <span className="rounded-md bg-indigo-500/10 px-2 py-1 text-[11px] font-mono font-semibold text-indigo-600 dark:text-indigo-400">BUILD {String(index + 1).padStart(2, '0')}</span>
-                  <span className="text-xs text-text-sub">Proof artifact</span>
-                </div>
-                <h3 className="mt-4 text-lg font-bold text-text-main">{build.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-text-muted">{build.description}</p>
-                <div className="mt-4 rounded-xl border border-border-subtle bg-surface-inset px-3.5 py-3 text-xs text-text-muted">
-                  <span className="font-medium text-text-main">Deliverable:</span> {build.artifact}
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        {/* Skills */}
-        <section className="mt-16">
-          <SectionIntro eyebrow="Skills" title="Skills you will use." />
-          <div className="mt-6 flex flex-wrap gap-2.5">
-            {program.skillsDeveloped.map((skill) => (
-              <span key={skill} className="rounded-lg border border-border-subtle bg-surface px-3.5 py-2 text-sm text-text-main">{skill}</span>
-            ))}
-          </div>
-        </section>
-
-        {/* Curriculum */}
-        <section className="mt-16">
-          <SectionIntro eyebrow="Curriculum" title="A focused path from foundations to a working build." />
-          <div className="mt-7 divide-y divide-border-subtle overflow-hidden rounded-2xl border border-border-subtle bg-surface">
-            {program.curriculum.map((module, index) => (
-              <article key={module.phase} className="grid gap-4 p-5 sm:grid-cols-[120px_1fr] sm:p-6">
-                <div>
-                  <span className="text-xs font-mono font-semibold text-indigo-600 dark:text-indigo-400">{module.phase}</span>
-                  <span className="mt-1 block text-xs text-text-sub">Module {String(index + 1).padStart(2, '0')}</span>
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-text-main">{module.title}</h3>
-                  <ul className="mt-3 grid gap-2 sm:grid-cols-2">
-                    {module.topics.map((topic) => (
-                      <li key={topic} className="flex gap-2 text-sm leading-6 text-text-muted">
-                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-500" />
-                        {topic}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        {/* Evaluation */}
-        <section className="mt-16">
-          <SectionIntro eyebrow="Evaluation" title="Show what you can do." copy="Evaluation focuses on the work you submit and the capability the program is designed to develop." />
-          <div className="mt-7 grid gap-4 md:grid-cols-3">
-            <EvaluationCard title="Review" icon={CheckCircle2}>{program.assessmentModel.codeReviews}</EvaluationCard>
-            <EvaluationCard title="Demonstrate" icon={Users}>{program.assessmentModel.capstoneDefense}</EvaluationCard>
-            <EvaluationCard title="Credential" icon={Award}>{program.assessmentModel.credentialCriteria}</EvaluationCard>
-          </div>
-        </section>
-
-        {/* Cohort CTA */}
-        <section className="mt-16 overflow-hidden rounded-3xl border border-border-subtle bg-surface-elevated p-6 sm:p-8">
-          <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
-            <div>
-              <p className="text-xs font-mono uppercase tracking-[0.16em] text-text-sub">Cohort information</p>
-              <h2 className="mt-3 text-2xl font-bold tracking-tight text-text-main">Ready to explore the next cohort?</h2>
-              <div className="mt-5 grid gap-3 text-sm text-text-muted sm:grid-cols-3">
-                <Meta icon={Clock3} label="Cadence" value={program.cohortDetails.cadence} compact />
-                <Meta icon={Users} label="Cohort" value={program.cohortDetails.seatPolicy} compact />
-                <Meta icon={Award} label="Access" value={program.cohortDetails.accessOptions} compact />
-              </div>
-            </div>
-            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-              <Button to="/workshops" variant="primary" icon={ArrowRight}>See workshops</Button>
-              <a href="mailto:admissions@deepentra.com" className="inline-flex items-center justify-center gap-2 rounded-xl border border-border-subtle px-4 py-2.5 text-sm font-medium text-text-main transition hover:bg-surface">
-                <Mail className="h-4 w-4" /> Ask admissions
-              </a>
-            </div>
-          </div>
-        </section>
-      </div>
-    </main>
-  );
+  const program = allProgramsData.find((item) => item.id === programId || item.slug === programId);
+  if (!program) return <main className="mx-auto max-w-4xl px-4 py-24 text-center"><p className="mb-3 text-xs font-mono uppercase tracking-[0.2em] text-text-sub">404 / Program</p><h1 className="text-3xl font-bold text-text-main">Program not found</h1><p className="mx-auto mt-3 max-w-md text-text-muted">The program may have moved or is no longer available.</p><div className="mt-7"><Button to="/programs" variant="secondary" icon={ArrowLeft} iconPosition="left">Browse programs</Button></div></main>;
+  const accent = trackAccent[program.trackId] || trackAccent['ai-careers'];
+  return <main className="pb-20"><div className="mx-auto max-w-6xl px-4 pt-7 sm:px-6 lg:px-8"><Link to="/programs" className="inline-flex items-center gap-2 text-sm text-text-muted transition hover:text-text-main"><ArrowLeft className="h-4 w-4" />All programs</Link>
+    <section className={`mt-6 overflow-hidden rounded-3xl border bg-gradient-to-br ${accent}`}><div className="grid gap-8 p-6 sm:p-9 lg:grid-cols-[1fr_300px] lg:p-10"><div><div className="flex flex-wrap items-center gap-2.5"><Badge trackId={program.trackId} icon>{program.trackName}</Badge><span className="rounded-full border border-border-subtle bg-surface/70 px-3 py-1 text-xs text-text-muted">{program.level}</span><span className="rounded-full border border-indigo-500/20 bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-600 dark:text-indigo-300">{program.status}</span></div><h1 className="mt-6 max-w-4xl text-4xl font-extrabold tracking-tight text-text-main sm:text-5xl lg:text-6xl">{program.title}</h1><p className="mt-5 max-w-3xl text-lg leading-8 text-text-muted sm:text-xl">{program.tagline}</p><div className="mt-7 flex flex-wrap gap-3"><Button to="/workshops" variant="primary" size="md" icon={ArrowRight}>Explore learning options</Button><Button to="/institutions" variant="secondary" size="md">For institutions</Button></div></div><aside className="self-end rounded-2xl border border-border-subtle bg-surface/80 p-5 backdrop-blur-sm"><p className="text-xs font-mono uppercase tracking-[0.16em] text-text-sub">Program at a glance</p><div className="mt-4 space-y-3"><Meta icon={Clock3} label="Duration" value={program.duration} /><Meta icon={Layers3} label="Format" value={program.deliveryMode} /><Meta icon={Award} label="Outcome" value="Practical proof of capability" /></div></aside></div></section>
+    <section className="mt-12 grid gap-5 lg:grid-cols-[1.25fr_.75fr]"><div className="rounded-2xl border border-border-subtle bg-surface p-6 sm:p-7"><p className="text-xs font-mono uppercase tracking-[0.16em] text-indigo-600 dark:text-indigo-400">What you leave with</p><h2 className="mt-3 text-2xl font-bold tracking-tight text-text-main">A capability you can demonstrate.</h2><p className="mt-3 text-base leading-7 text-text-muted">{program.primaryOutcome}</p></div><div className="rounded-2xl border border-border-subtle bg-surface p-6 sm:p-7"><p className="text-xs font-mono uppercase tracking-[0.16em] text-text-sub">Best for</p><ul className="mt-4 space-y-3">{program.whoIsThisFor.idealFor.map((item)=><li key={item} className="flex gap-2.5 text-sm leading-6 text-text-muted"><CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-emerald-500" /><span>{item}</span></li>)}</ul></div></section>
+    <section className="mt-5 grid gap-5 sm:grid-cols-2"><InfoCard label="Prerequisites" value={program.whoIsThisFor.prerequisites}/><InfoCard label="Weekly effort" value={program.whoIsThisFor.timeCommitment}/></section>
+    <section className="mt-16"><SectionIntro eyebrow="Build" title="Build work you can show." copy="Each stage ends in a practical artifact—not just another lesson completed."/><div className="mt-7 grid gap-4 md:grid-cols-2">{program.whatYouWillBuild.map((build,index)=><article key={build.title} className="rounded-2xl border border-border-subtle bg-surface p-5 transition hover:-translate-y-0.5 hover:border-indigo-500/30 sm:p-6"><div className="flex items-center justify-between gap-4"><span className="rounded-md bg-indigo-500/10 px-2 py-1 text-[11px] font-mono font-semibold text-indigo-600 dark:text-indigo-400">BUILD {String(index+1).padStart(2,'0')}</span><span className="text-xs text-text-sub">Proof artifact</span></div><h3 className="mt-4 text-lg font-bold text-text-main">{build.title}</h3><p className="mt-2 text-sm leading-6 text-text-muted">{build.description}</p><div className="mt-4 rounded-xl border border-border-subtle bg-surface-inset px-3.5 py-3 text-xs text-text-muted"><span className="font-medium text-text-main">Deliverable:</span> {build.artifact}</div></article>)}</div></section>
+    <section className="mt-16"><SectionIntro eyebrow="Skills" title="Skills you will use."/><div className="mt-6 flex flex-wrap gap-2.5">{program.skillsDeveloped.map((skill)=><span key={skill} className="rounded-lg border border-border-subtle bg-surface px-3.5 py-2 text-sm text-text-main">{skill}</span>)}</div></section>
+    <section className="mt-16"><SectionIntro eyebrow="Curriculum" title="A focused path from foundations to a working build."/><div className="mt-7 divide-y divide-border-subtle overflow-hidden rounded-2xl border border-border-subtle bg-surface">{program.curriculum.map((module,index)=><article key={module.phase} className="grid gap-4 p-5 sm:grid-cols-[120px_1fr] sm:p-6"><div><span className="text-xs font-mono font-semibold text-indigo-600 dark:text-indigo-400">{module.phase}</span><span className="mt-1 block text-xs text-text-sub">Module {String(index+1).padStart(2,'0')}</span></div><div><h3 className="text-base font-bold text-text-main">{module.title}</h3><ul className="mt-3 grid gap-2 sm:grid-cols-2">{module.topics.map(topic=><li key={topic} className="flex gap-2 text-sm leading-6 text-text-muted"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-500"/>{topic}</li>)}</ul></div></article>)}</div></section>
+    <section className="mt-16"><SectionIntro eyebrow="Evaluation" title="Show what you can do." copy="Evaluation focuses on the work you submit and the capability the program is designed to develop."/><div className="mt-7 grid gap-4 md:grid-cols-3"><EvaluationCard title="Review" icon={CheckCircle2}>{program.assessmentModel.codeReviews}</EvaluationCard><EvaluationCard title="Demonstrate" icon={Users}>{program.assessmentModel.capstoneDefense}</EvaluationCard><EvaluationCard title="Credential" icon={Award}>{program.assessmentModel.credentialCriteria}</EvaluationCard></div></section>
+    <section className="mt-16 overflow-hidden rounded-3xl border border-border-subtle bg-surface-elevated p-6 sm:p-8"><div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end"><div><p className="text-xs font-mono uppercase tracking-[0.16em] text-text-sub">Cohort information</p><h2 className="mt-3 text-2xl font-bold tracking-tight text-text-main">Ready to explore the next cohort?</h2><div className="mt-5 grid gap-3 text-sm text-text-muted sm:grid-cols-3"><Meta icon={Clock3} label="Cadence" value={program.cohortDetails.cadence} compact/><Meta icon={Users} label="Cohort" value={program.cohortDetails.seatPolicy} compact/><Meta icon={Award} label="Access" value={program.cohortDetails.accessOptions} compact/></div></div><div className="flex flex-col gap-3 sm:flex-row lg:flex-col"><Button to="/workshops" variant="primary" icon={ArrowRight}>See workshops</Button><a href="mailto:admissions@deepentra.com" className="inline-flex items-center justify-center gap-2 rounded-xl border border-border-subtle px-4 py-2.5 text-sm font-medium text-text-main transition hover:bg-surface"><Mail className="h-4 w-4"/>Ask admissions</a></div></div></section>
+  </div></main>;
 }
-
-function SectionIntro({ eyebrow, title, copy }) {
-  return (
-    <div className="max-w-3xl">
-      <p className="text-xs font-mono uppercase tracking-[0.16em] text-indigo-600 dark:text-indigo-400">{eyebrow}</p>
-      <h2 className="mt-2 text-2xl font-bold tracking-tight text-text-main sm:text-3xl">{title}</h2>
-      {copy && <p className="mt-2 max-w-2xl text-sm leading-6 text-text-muted">{copy}</p>}
-    </div>
-  );
-}
-
-function Meta({ icon: Icon, label, value, compact = false }) {
-  return (
-    <div className={`flex gap-2.5 ${compact ? 'items-start' : 'items-center'}`}>
-      <Icon className="mt-0.5 h-4 w-4 shrink-0 text-indigo-500" />
-      <div className="min-w-0">
-        <span className="block text-[11px] uppercase tracking-wide text-text-sub">{label}</span>
-        <span className="block text-sm leading-5 text-text-main">{value}</span>
-      </div>
-    </div>
-  );
-}
-
-function InfoCard({ label, value }) {
-  return (
-    <div className="rounded-2xl border border-border-subtle bg-surface p-5">
-      <p className="text-xs font-mono uppercase tracking-[0.14em] text-text-sub">{label}</p>
-      <p className="mt-2 text-sm leading-6 text-text-muted">{value}</p>
-    </div>
-  );
-}
-
-function EvaluationCard({ title, icon: Icon, children }) {
-  return (
-    <article className="rounded-2xl border border-border-subtle bg-surface p-5 sm:p-6">
-      <Icon className="h-5 w-5 text-indigo-500" />
-      <h3 className="mt-4 font-bold text-text-main">{title}</h3>
-      <p className="mt-2 text-sm leading-6 text-text-muted">{children}</p>
-    </article>
-  );
-}
+function SectionIntro({eyebrow,title,copy}){return <div className="max-w-3xl"><p className="text-xs font-mono uppercase tracking-[0.16em] text-indigo-600 dark:text-indigo-400">{eyebrow}</p><h2 className="mt-2 text-2xl font-bold tracking-tight text-text-main sm:text-3xl">{title}</h2>{copy&&<p className="mt-2 max-w-2xl text-sm leading-6 text-text-muted">{copy}</p>}</div>}
+function Meta({icon:Icon,label,value,compact=false}){return <div className={`flex gap-2.5 ${compact?'items-start':'items-center'}`}><Icon className="mt-0.5 h-4 w-4 shrink-0 text-indigo-500"/><div className="min-w-0"><span className="block text-[11px] uppercase tracking-wide text-text-sub">{label}</span><span className="block text-sm leading-5 text-text-main">{value}</span></div></div>}
+function InfoCard({label,value}){return <div className="rounded-2xl border border-border-subtle bg-surface p-5"><p className="text-xs font-mono uppercase tracking-[0.14em] text-text-sub">{label}</p><p className="mt-2 text-sm leading-6 text-text-muted">{value}</p></div>}
+function EvaluationCard({title,icon:Icon,children}){return <article className="rounded-2xl border border-border-subtle bg-surface p-5 sm:p-6"><Icon className="h-5 w-5 text-indigo-500"/><h3 className="mt-4 font-bold text-text-main">{title}</h3><p className="mt-2 text-sm leading-6 text-text-muted">{children}</p></article>}
