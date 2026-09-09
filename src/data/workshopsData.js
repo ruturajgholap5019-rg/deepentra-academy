@@ -1,0 +1,62 @@
+export const workshopsData = [
+  {
+    id: "local-llm-agents",
+    title: "Build a Local AI Agent with Ollama",
+    track: "AI & Software Careers",
+    trackId: "ai-careers",
+    duration: "3 Hours • Intensive Hands-On Lab",
+    level: "Intermediate",
+    format: "Live Interactive Coding Lab",
+    problemStatement: "Local models give developers a practical way to experiment with AI on their own machines and explore different model runtimes.",
+    whatYouWillDo: "Set up Ollama, connect a local model to tools, and build a small agent that works with local data.",
+    tangibleOutput: "A local tool-using agent that can work with selected files on your machine.",
+    skillsCovered: ["Ollama Setup", "Local open-weight models", "Tool-Calling Architecture", "Local context and memory"],
+    upcomingDates: "Saturday Sessions (Check Schedule)",
+    status: "Upcoming Session"
+  },
+  {
+    id: "executive-ai-synthesis",
+    title: "AI Workflow Automation for Teams",
+    track: "Applied AI",
+    trackId: "applied-ai",
+    duration: "2.5 Hours • Hands-on Workshop",
+    level: "Beginner to Intermediate",
+    format: "Live Sprint with Screen-Share Coaching",
+    problemStatement: "Teams often repeat the same work across email, documents, spreadsheets, and task systems.",
+    whatYouWillDo: "Build a multi-step workflow that turns meeting notes into structured actions and draft follow-ups.",
+    tangibleOutput: "A tested workflow you can adapt to a real team process.",
+    skillsCovered: ["Workflow Logic", "Structured Data Extraction", "Make / Zapier Webhooks", "Prompt templates"],
+    upcomingDates: "Thursday Evenings (Check Schedule)",
+    status: "Upcoming Session"
+  },
+  {
+    id: "ai-safety-prompting",
+    title: "Prompting & AI Verification Workshop",
+    track: "AI Literacy",
+    trackId: "ai-literacy",
+    duration: "2 Hours • Interactive Workshop",
+    level: "All Levels Welcome",
+    format: "Live Guided Exercises + Interactive Polls",
+    problemStatement: "AI is useful, but its answers still need context, clear instructions, and verification.",
+    whatYouWillDo: "Test common failure modes, improve prompts, and practice simple verification methods for important outputs.",
+    tangibleOutput: "A calibrated Personal Fact-Checking & Prompt Validation Matrix document.",
+    skillsCovered: ["Hallucination Auditing", "Prompt structure & reasoning controls", "Document Verification", "Safe Public AI Hygiene"],
+    upcomingDates: "Bi-Weekly Sundays (Check Schedule)",
+    status: "Upcoming Session"
+  },
+  {
+    id: "rag-evaluation-deepdive",
+    title: "RAG Evaluation: Metrics with Ragas & TruLens",
+    track: "AI & Software Careers",
+    trackId: "ai-careers",
+    duration: "3 Hours • Technical Deep Dive",
+    level: "Advanced",
+    format: "Live Code Lab & Benchmark Comparison",
+    problemStatement: "A RAG system needs evaluation beyond a few good-looking answers.",
+    whatYouWillDo: "Build a small evaluation set, compare retrieval approaches, and inspect faithfulness and context quality.",
+    tangibleOutput: "A reusable evaluation workflow for a retrieval-augmented generation application.",
+    skillsCovered: ["Ragas Framework", "Evaluation dataset design", "Retrieval quality metrics", "Tracing & debugging"],
+    upcomingDates: "Weekend Technical Series",
+    status: "Upcoming Session"
+  }
+];
